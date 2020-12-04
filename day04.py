@@ -12,12 +12,11 @@ mandatory_field_validators = {
 
 assert len(sys.argv) == 2
 passport_lines = open(sys.argv[1]).read().replace('\r\n', '\n').replace('\n\n', '|').replace('\n', ' ').split('|')
-passports = []
+
+part1 = part2 = 0
 for line in passport_lines:
     passport = {field.split(':')[0]: field.split(':')[1] for field in line.split()}
-    passports.append(passport)
-
-part1 = sum(all(key in passport for key in mandatory_field_validators) for passport in passports)
-part2 = sum(all(func(passport.get(key, '')) for key, func in mandatory_field_validators.items()) for passport in passports)
+    part1 += all(key in passport for key in mandatory_field_validators)
+    part2 += all(func(passport.get(key, '')) for key, func in mandatory_field_validators.items())
 
 print(f'Part 1: {part1}, Part 2: {part2}')
