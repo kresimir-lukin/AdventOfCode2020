@@ -1,14 +1,14 @@
 import sys, re, collections
 
-def part1(rules):
-    queue, reachable = collections.deque(['shiny gold']), set(['shiny gold'])
+def part1(inverse_rules):
+    queue, reachable = collections.deque(['shiny gold']), set()
     while queue:
         color = queue.pop()
-        for c in rules.get(color, []):
+        for c in inverse_rules.get(color, []):
             if c not in reachable:
                 reachable.add(c)
                 queue.appendleft(c)
-    return len(reachable) - 1
+    return len(reachable)
 
 def part2(rules, color = 'shiny gold'):
     return sum(number + number * part2(rules, c) for c, number in rules[color].items())
