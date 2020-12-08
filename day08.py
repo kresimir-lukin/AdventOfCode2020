@@ -1,10 +1,10 @@
 import sys
 
 def execute(program):
-    pc_visited = set()
+    pc_visited = [False] * len(program)
     accumulator = pc = 0
-    while pc < len(program) and pc not in pc_visited:
-        pc_visited.add(pc)
+    while pc < len(program) and not pc_visited[pc]:
+        pc_visited[pc] = True
         instruction, argument = program[pc]
         if instruction == 'acc':
             accumulator += argument
