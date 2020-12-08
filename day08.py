@@ -13,24 +13,17 @@ def execute(program):
         pc += 1
     return accumulator, pc == len(program)
 
-def execute_by_modification(pc, instruction):
-    prev_instruction, program[pc][0] = program[pc][0], instruction
-    accumulator, done = execute(program)
-    program[pc][0] = prev_instruction
-    return accumulator if done else False
-
 def part1(program):
     return execute(program)[0]
 
 def part2(program):
-    nops = [pc for pc, (instruction, _) in enumerate(program) if instruction == 'nop']
-    jmps = [pc for pc, (instruction, _) in enumerate(program) if instruction == 'jmp']
-    accumulator = False
-    for jmp in jmps:
-        accumulator = accumulator or execute_by_modification(jmp, 'nop')
-    for nop in nops:
-        accumulator = accumulator or execute_by_modification(nop, 'jmp')
-    return accumulator
+    for pc, (instruction, _) in enumerate(program):
+        if instruction in ('nop', 'jmp'):
+            program[pc][0] = 'jmp' if instruction == 'nop' else 'nop'
+            accumulator, done = execute(program)
+            program[pc][0] = instruction
+            if done:
+                return accumulator
 
 assert len(sys.argv) == 2
 program = [[instruction.split()[0], int(instruction.split()[1])] for instruction in open(sys.argv[1]).read().splitlines()]
