@@ -19,8 +19,8 @@ def part2(insts):
             address = bin(int(instruction))[2:].zfill(36)
             address = [bit_mask if bit_mask in '1X' else bit_address for bit_address, bit_mask in zip(address, mask)]
             xs = [i for i, bit in enumerate(address) if bit == 'X']
-            for permutation in range(1 << len(xs)):
-                for i, bit in enumerate(bin(permutation)[2:].zfill(len(xs))):
+            for combination in range(1 << len(xs)):
+                for i, bit in enumerate(bin(combination)[2:].zfill(len(xs))):
                     address[xs[i]] = bit
                 memory[''.join(address)] = int(value)
     return sum(memory.values())
