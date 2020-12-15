@@ -10,7 +10,7 @@ def part1(instructions):
             memory[address] = value & set0mask | set1mask
     return sum(memory.values())
 
-def part2(insts):
+def part2(instructions):
     mask, memory = '', {}
     for instruction, value in instructions:
         if instruction == 'mask':
