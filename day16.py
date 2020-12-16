@@ -30,19 +30,22 @@ def check_valid(fields, nearby_tickets):
 
 def part2(fields, your_ticket, valid_tickets):
     potential_fields = [set() for _ in range(len(your_ticket))]
+    fields_order = ['' for _ in range(len(fields))]
+
     for i in range(len(your_ticket)):
         for field, (from1, to1, from2, to2) in fields.items():
             if all(from1 <= ticket[i] <= to1 or from2 <= ticket[i] <= to2 for ticket in valid_tickets):
                 potential_fields[i].add(field)
-    fields_order = {}
-    while len(fields_order) < len(fields):
-        i = next(i for i, potential_vaules in enumerate(potential_fields) if len(potential_vaules) == 1)
-        value = potential_fields[i].pop()
+
+    while any(not field for field in fields_order):
+        pos = next(pos for pos, potential_vaules in enumerate(potential_fields) if len(potential_vaules) == 1)
+        value = potential_fields[pos].pop()
         for potential_vaules in potential_fields:
             if value in potential_vaules:
                 potential_vaules.remove(value)
-        fields_order[value] = i
-    return functools.reduce(operator.mul, [your_ticket[position] for field, position in fields_order.items() if field.startswith('departure')], 1)
+        fields_order[pos] = value
+
+    return functools.reduce(operator.mul, [your_ticket[pos] for pos, field in enumerate(fields_order) if field.startswith('departure')], 1)
 
 fields, your_ticket, nearby_tickets = parse_input()
 valid_tickets, part1 = check_valid(fields, nearby_tickets)
